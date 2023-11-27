@@ -96,6 +96,26 @@ const drawGrid = () => {
     }
 }
 
+const checkEat = () => {
+    const head = snake[snake.length - 1]
+
+    if (head.x == food.x && head.y == food.y) {
+        snake.push(head)
+
+        let x = ramdomPosition()
+        let y = ramdomPosition()
+        
+        while (snake.find((position) => position.x == x && position.y ==y)) {
+            x = ramdomPosition()
+            y = ramdomPosition()
+        }
+
+        food.x = x;
+        food.y = y;
+        food.color = ramdomColor();
+    }
+}
+
 const gameLoop = () => {
     //limpa o loop para que não haja bugs
     clearInterval(loopId)
@@ -105,6 +125,8 @@ const gameLoop = () => {
     drawFood()
     drawSnake()
     moveSnake()
+
+    checkEat()
 
     loopId = setTimeout(() => {
         gameLoop()
