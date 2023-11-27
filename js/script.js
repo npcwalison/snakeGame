@@ -8,7 +8,7 @@ const snake = [
     { x: 230, y: 200 }
 ]
 
-let direction = "up"
+let direction, loopId
 
 const drawSnake = () => {
     ctx.fillStyle = "#DDD"
@@ -28,29 +28,55 @@ const moveSnake = () => {
     //indicando o último ponto(cabeça da cobra).
     const head = snake[snake.length - 1]
     //inicia o movimento para direita
-    if(direction == "right") {
+    if(direction === "right") {
         snake.push({ x: head.x + size, y: head.y })
     }
     //inicia o movimento para esquerda
-    if(direction == "left") {
+    if(direction === "left") {
         snake.push({ x: head.x - size, y: head.y })
     }
     //inicia o movimento para descer
-    if(direction == "down") {
+    if(direction === "down") {
         snake.push({ x: head.x, y: head.y + size})
     }
     //inicia o movimento para subir
-    if(direction == "up") {
+    if(direction === "up") {
         snake.push({ x: head.x, y: head.y - size})
     }
 
     snake.shift()
 }
 
-setInterval(() => {
+const gameLoop = () => {
+    //limpa o loop para que não haja bugs
+    clearInterval(loopId)
     //limpa a tela de pixel a pixel.
     ctx.clearRect(0, 0, 600, 600)
-
     drawSnake()
     moveSnake()
-}, 300)
+
+    loopId = setTimeout(() => {
+        gameLoop()
+    }, 300)
+}
+
+gameLoop()
+
+document.addEventListener("keydown", ({ key }) => {
+
+    if(key === "ArrowRight") {
+        direction = "right";
+    }
+
+    if(key === "ArrowLeft") {
+        direction = "left";
+    }
+
+    if(key === "ArrowUp") {
+        direction = "up";
+    }
+
+    if(key === "ArrowDown") {
+        direction = "down";
+    }
+})
